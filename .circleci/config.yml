@@ -14,16 +14,15 @@ jobs:
       - run:
           command: ./manage.py test
           name: Test
+  beagle-trigger:
+    docker:
+        - image: beaglesecurity/beagle-test-trigger-common:latest
+    steps:
+        - run:
+            command: trigger-test
 
 workflows:
   main:
     jobs:
       - build-and-test
-machine:
-  post:
-    - cp -r /usr/local/bin/git $HOME/git
-dependencies:
-  cache_directories:
-    - $HOME/git
-  post:
-    - sudo cp -r $HOME/git /usr/local/bin/git
+      - beagle-trigger
